@@ -1,0 +1,35 @@
+---
+// Zero-JS-until-click YouTube facade. Loads only a thumbnail from ytimg;
+// the iframe (and all of YouTube's JS) loads on demand.
+interface Props {
+  id: string;
+  title?: string;
+}
+const { id, title = 'YouTube video' } = Astro.props;
+const thumb = `https://i.ytimg.com/vi/${id}/hqdefault.jpg`;
+---
+
+<button
+  class="yt-facade"
+  type="button"
+  data-yt-id={id}
+  aria-label={`Play video: ${title}`}
+  style={`background-image:url('${thumb}')`}
+></button>
+
+<script is:inline>
+  document.querySelectorAll('.yt-facade').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var iframe = document.createElement('iframe');
+      iframe.className = 'yt-frame';
+      iframe.src =
+        'https://www.youtube-nocookie.com/embed/' +
+        btn.dataset.ytId +
+        '?autoplay=1';
+      iframe.title = btn.getAttribute('aria-label') || 'YouTube video';
+      iframe.allow = 'autoplay; encrypted-media; picture-in-picture';
+      iframe.allowFullscreen = true;
+      btn.replaceWith(iframe);
+    });
+  });
+</script>

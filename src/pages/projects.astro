@@ -1,0 +1,24 @@
+---
+import Base from '../layouts/Base.astro';
+import { getCollection, render } from 'astro:content';
+
+const projects = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order);
+const rendered = await Promise.all(
+  projects.map(async (p) => ({ data: p.data, Content: (await render(p)).Content }))
+);
+---
+
+<Base
+  title="Projects — David Gerbino"
+  description="Live fintech data tools and products built by David Gerbino."
+>
+  <h1>Projects</h1>
+  {rendered.map(({ data, Content }) => (
+    <section>
+      <h2>{data.url ? <a href={data.url}>{data.title}</a> : data.title}</h2>
+      <p class="data-line"><span>{data.status}</span></p>
+      <p>{data.description}</p>
+      <Content />
+    </section>
+  ))}
+</Base>

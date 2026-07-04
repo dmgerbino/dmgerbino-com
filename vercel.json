@@ -1,0 +1,299 @@
+{
+  "redirects": [
+    {
+      "source": "/post/:id/:slug*/amp",
+      "destination": "/post/:id/:slug*",
+      "permanent": true
+    },
+    {
+      "source": "/post/30426187",
+      "destination": "/writing/save-the-pies-for-dessert",
+      "permanent": true
+    },
+    {
+      "source": "/post/30426187/:slug*",
+      "destination": "/writing/save-the-pies-for-dessert",
+      "permanent": true
+    },
+    {
+      "source": "/post/31090819",
+      "destination": "/writing/person-2-person-lending-p2p",
+      "permanent": true
+    },
+    {
+      "source": "/post/31090819/:slug*",
+      "destination": "/writing/person-2-person-lending-p2p",
+      "permanent": true
+    },
+    {
+      "source": "/post/51492790",
+      "destination": "/writing/new-york-times-home-delivery-issues",
+      "permanent": true
+    },
+    {
+      "source": "/post/51492790/:slug*",
+      "destination": "/writing/new-york-times-home-delivery-issues",
+      "permanent": true
+    },
+    {
+      "source": "/post/79983013",
+      "destination": "/writing/improving-your-bank-efficiency-ratio",
+      "permanent": true
+    },
+    {
+      "source": "/post/79983013/:slug*",
+      "destination": "/writing/improving-your-bank-efficiency-ratio",
+      "permanent": true
+    },
+    {
+      "source": "/post/182835113",
+      "destination": "/writing/bad-data-visualization-surprise-it-s-pie",
+      "permanent": true
+    },
+    {
+      "source": "/post/182835113/:slug*",
+      "destination": "/writing/bad-data-visualization-surprise-it-s-pie",
+      "permanent": true
+    },
+    {
+      "source": "/post/218218182",
+      "destination": "/writing/customer-advocacy-questions-from-ron-shevlin-s-marketing-tea-party",
+      "permanent": true
+    },
+    {
+      "source": "/post/218218182/:slug*",
+      "destination": "/writing/customer-advocacy-questions-from-ron-shevlin-s-marketing-tea-party",
+      "permanent": true
+    },
+    {
+      "source": "/post/220974388",
+      "destination": "/writing/18-essential-tools-for-every-word-of-mouth-marketer",
+      "permanent": true
+    },
+    {
+      "source": "/post/220974388/:slug*",
+      "destination": "/writing/18-essential-tools-for-every-word-of-mouth-marketer",
+      "permanent": true
+    },
+    {
+      "source": "/post/284204765",
+      "destination": "/writing/google-releases-api-for-cool-visualization-of-data-mashups-from-many",
+      "permanent": true
+    },
+    {
+      "source": "/post/284204765/:slug*",
+      "destination": "/writing/google-releases-api-for-cool-visualization-of-data-mashups-from-many",
+      "permanent": true
+    },
+    {
+      "source": "/post/452259792",
+      "destination": "/writing/hsbc-admits-huge-swiss-bank-data-theft",
+      "permanent": true
+    },
+    {
+      "source": "/post/452259792/:slug*",
+      "destination": "/writing/hsbc-admits-huge-swiss-bank-data-theft",
+      "permanent": true
+    },
+    {
+      "source": "/post/468001762",
+      "destination": "/writing/eagereyes-shorts-keep-your-org-chart-to-yourself",
+      "permanent": true
+    },
+    {
+      "source": "/post/468001762/:slug*",
+      "destination": "/writing/eagereyes-shorts-keep-your-org-chart-to-yourself",
+      "permanent": true
+    },
+    {
+      "source": "/post/586915967",
+      "destination": "/writing/data-visualization-done-right-by-the-new-york-times",
+      "permanent": true
+    },
+    {
+      "source": "/post/586915967/:slug*",
+      "destination": "/writing/data-visualization-done-right-by-the-new-york-times",
+      "permanent": true
+    },
+    {
+      "source": "/post/908086544",
+      "destination": "/writing/book-review-bank-2-0-whats-the-future-of-your-bank",
+      "permanent": true
+    },
+    {
+      "source": "/post/908086544/:slug*",
+      "destination": "/writing/book-review-bank-2-0-whats-the-future-of-your-bank",
+      "permanent": true
+    },
+    {
+      "source": "/post/2432064409",
+      "destination": "/writing/meetzi-com",
+      "permanent": true
+    },
+    {
+      "source": "/post/2432064409/:slug*",
+      "destination": "/writing/meetzi-com",
+      "permanent": true
+    },
+    {
+      "source": "/post/4023815506",
+      "destination": "/writing/collaborating-and-engaging-with-co-workers-via-convofy",
+      "permanent": true
+    },
+    {
+      "source": "/post/4023815506/:slug*",
+      "destination": "/writing/collaborating-and-engaging-with-co-workers-via-convofy",
+      "permanent": true
+    },
+    {
+      "source": "/post/20840139239",
+      "destination": "/writing/ilovecharts-via-whereinthehellisnowherenow-very-interesting-data-from",
+      "permanent": true
+    },
+    {
+      "source": "/post/20840139239/:slug*",
+      "destination": "/writing/ilovecharts-via-whereinthehellisnowherenow-very-interesting-data-from",
+      "permanent": true
+    },
+    {
+      "source": "/post/37188424157",
+      "destination": "/writing/american-banker-names-squares-jack-dorsey-innovator-of-the-year",
+      "permanent": true
+    },
+    {
+      "source": "/post/37188424157/:slug*",
+      "destination": "/writing/american-banker-names-squares-jack-dorsey-innovator-of-the-year",
+      "permanent": true
+    },
+    {
+      "source": "/post/43523485185",
+      "destination": "/writing/what-is-it-about-bank-product-profitability-that-makes-it-so-exciting",
+      "permanent": true
+    },
+    {
+      "source": "/post/43523485185/:slug*",
+      "destination": "/writing/what-is-it-about-bank-product-profitability-that-makes-it-so-exciting",
+      "permanent": true
+    },
+    {
+      "source": "/post/51303619746",
+      "destination": "/writing/thank-you-ethan-marcotte-for-rwd",
+      "permanent": true
+    },
+    {
+      "source": "/post/51303619746/:slug*",
+      "destination": "/writing/thank-you-ethan-marcotte-for-rwd",
+      "permanent": true
+    },
+    {
+      "source": "/post/61670520950",
+      "destination": "/writing/how-the-bar-rescue-bankers-edition-blog-post-from-jeffmarsico-started",
+      "permanent": true
+    },
+    {
+      "source": "/post/61670520950/:slug*",
+      "destination": "/writing/how-the-bar-rescue-bankers-edition-blog-post-from-jeffmarsico-started",
+      "permanent": true
+    },
+    {
+      "source": "/post/70490429671",
+      "destination": "/writing/finally-got-the-paywithisis-latest-update-on-my-verizonwireless",
+      "permanent": true
+    },
+    {
+      "source": "/post/70490429671/:slug*",
+      "destination": "/writing/finally-got-the-paywithisis-latest-update-on-my-verizonwireless",
+      "permanent": true
+    },
+    {
+      "source": "/post/72550679737",
+      "destination": "/writing/why-should-bank-marketers-know-and-care-about-funds-transfer-pricing-a",
+      "permanent": true
+    },
+    {
+      "source": "/post/72550679737/:slug*",
+      "destination": "/writing/why-should-bank-marketers-know-and-care-about-funds-transfer-pricing-a",
+      "permanent": true
+    },
+    {
+      "source": "/post/83839966763",
+      "destination": "/writing/i-recommend-you-follow-timbunch-for-today-s-ff",
+      "permanent": true
+    },
+    {
+      "source": "/post/83839966763/:slug*",
+      "destination": "/writing/i-recommend-you-follow-timbunch-for-today-s-ff",
+      "permanent": true
+    },
+    {
+      "source": "/post/89278310022",
+      "destination": "/writing/where-is-the-innovation",
+      "permanent": true
+    },
+    {
+      "source": "/post/89278310022/:slug*",
+      "destination": "/writing/where-is-the-innovation",
+      "permanent": true
+    },
+    {
+      "source": "/post/93404233857",
+      "destination": "/writing/the-fintech-sector-helps-banks-and-credit-unions",
+      "permanent": true
+    },
+    {
+      "source": "/post/93404233857/:slug*",
+      "destination": "/writing/the-fintech-sector-helps-banks-and-credit-unions",
+      "permanent": true
+    },
+    {
+      "source": "/post/100832135923",
+      "destination": "/writing/the-applepay-mobile-payments-failure-a-missed-opportunity-for-pos",
+      "permanent": true
+    },
+    {
+      "source": "/post/100832135923/:slug*",
+      "destination": "/writing/the-applepay-mobile-payments-failure-a-missed-opportunity-for-pos",
+      "permanent": true
+    },
+    {
+      "source": "/post/116666903562",
+      "destination": "/writing/mobile-only-bank-bankmobile-revisited",
+      "permanent": true
+    },
+    {
+      "source": "/post/116666903562/:slug*",
+      "destination": "/writing/mobile-only-bank-bankmobile-revisited",
+      "permanent": true
+    },
+    {
+      "source": "/post/118665348777",
+      "destination": "/writing/the-fintech-assault-on-the-bank-and-credit-union-deposit-relationship",
+      "permanent": true
+    },
+    {
+      "source": "/post/118665348777/:slug*",
+      "destination": "/writing/the-fintech-assault-on-the-bank-and-credit-union-deposit-relationship",
+      "permanent": true
+    },
+    {
+      "source": "/post/124079689822",
+      "destination": "/writing/why-do-so-many-e-commerce-companies-choose-a-friction-filled-checkout",
+      "permanent": true
+    },
+    {
+      "source": "/post/124079689822/:slug*",
+      "destination": "/writing/why-do-so-many-e-commerce-companies-choose-a-friction-filled-checkout",
+      "permanent": true
+    },
+    {
+      "source": "/post/144191272312",
+      "destination": "/writing/advancements-in-digital-lending-technology-are-now-available-for",
+      "permanent": true
+    },
+    {
+      "source": "/post/144191272312/:slug*",
+      "destination": "/writing/advancements-in-digital-lending-technology-are-now-available-for",
+      "permanent": true
+    }
+  ]
+}

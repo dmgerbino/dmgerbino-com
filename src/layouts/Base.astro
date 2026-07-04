@@ -1,0 +1,131 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description: string;
+  /** 'website' | 'article' */
+  ogType?: string;
+  /** Extra JSON-LD objects to inject alongside the sitewide graph */
+  jsonLd?: object[];
+  noindex?: boolean;
+}
+
+const { title, description, ogType = 'website', jsonLd = [], noindex = false } = Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.site).href.replace(/\/$/, '') || Astro.site;
+
+const SITE_NAME = 'David Gerbino';
+
+// Sitewide entity graph: who this site is and who is behind it.
+const siteGraph = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    '@id': 'https://www.dmgerbino.com/#website',
+    url: 'https://www.dmgerbino.com',
+    name: SITE_NAME,
+    description:
+      'Personal hub for David Gerbino: fintech data builder and writer.',
+    publisher: { '@id': 'https://www.dmgerbino.com/#person' },
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Person',
+    '@id': 'https://www.dmgerbino.com/#person',
+    name: 'David Gerbino',
+    url: 'https://www.dmgerbino.com',
+    sameAs: ['https://x.com/dmgerbino'],
+    knowsAbout: [
+      'fintech',
+      'banking data',
+      'FFIEC call reports',
+      'regulatory analytics',
+      'data visualization',
+    ],
+  },
+];
+
+const allJsonLd = [...siteGraph, ...jsonLd];
+const nav = [
+  { href: '/writing', label: 'Writing' },
+  { href: '/notes', label: 'Notes' },
+  { href: '/projects', label: 'Projects' },
+  { href: '/now', label: 'Now' },
+  { href: '/about', label: 'About' },
+];
+const path = Astro.url.pathname.replace(/\/$/, '');
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex" />}
+    <link rel="alternate" type="application/rss+xml" title={SITE_NAME} href="/rss.xml" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+
+    <meta property="og:type" content={ogType} />
+    <meta property="og:site_name" content={SITE_NAME} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@dmgerbino" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+
+    <script type="application/ld+json" set:html={JSON.stringify(allJsonLd)} />
+
+    <script is:inline>
+      // Theme: honor saved choice, else OS preference. Inline to avoid FOUC.
+      (function () {
+        var saved = localStorage.getItem('theme');
+        var dark = saved
+          ? saved === 'dark'
+          : window.matchMedia('(prefers-color-scheme: dark)').matches;
+        document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
+      })();
+    </script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="site-header">
+      <div class="wrap">
+        <a class="site-name" href="/">David Gerbino</a>
+        <nav class="site-nav" aria-label="Site">
+          {nav.map((item) => (
+            <a href={item.href} aria-current={path.startsWith(item.href) ? 'page' : undefined}>
+              {item.label}
+            </a>
+          ))}
+        </nav>
+        <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
+          Theme
+        </button>
+      </div>
+    </header>
+    <main id="main" class="wrap">
+      <slot />
+    </main>
+    <footer class="site-footer">
+      <div class="wrap">
+        <span>© {new Date().getFullYear()} David Gerbino</span>
+        <a href="https://x.com/dmgerbino">X</a>
+        <a href="/rss.xml">RSS</a>
+        <a href="/llms.txt">llms.txt</a>
+      </div>
+    </footer>
+    <script is:inline>
+      document.getElementById('theme-toggle').addEventListener('click', function () {
+        var next =
+          document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+        document.documentElement.setAttribute('data-theme', next);
+        localStorage.setItem('theme', next);
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,90 @@
+---
+import Base from './Base.astro';
+import YouTube from '../components/YouTube.astro';
+
+interface Source {
+  title: string;
+  url: string;
+}
+interface Props {
+  title: string;
+  description: string;
+  pubDate: Date;
+  updatedDate?: Date;
+  tags?: string[];
+  youtube?: string;
+  sources?: Source[];
+  /** raw MDX body, used only to compute honest word count / read time */
+  body?: string;
+}
+
+const {
+  title,
+  description,
+  pubDate,
+  updatedDate,
+  tags = [],
+  youtube,
+  sources = [],
+  body = '',
+} = Astro.props;
+
+const words = body.split(/\s+/).filter(Boolean).length;
+const minutes = Math.max(1, Math.round(words / 230));
+const iso = (d: Date) => d.toISOString().slice(0, 10);
+const canonical = new URL(Astro.url.pathname, Astro.site).href.replace(/\/$/, '');
+
+const articleLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  headline: title,
+  description,
+  url: canonical,
+  mainEntityOfPage: canonical,
+  datePublished: pubDate.toISOString(),
+  ...(updatedDate && { dateModified: updatedDate.toISOString() }),
+  author: { '@id': 'https://www.dmgerbino.com/#person' },
+  publisher: { '@id': 'https://www.dmgerbino.com/#person' },
+  keywords: tags.join(', '),
+  wordCount: words,
+  ...(sources.length && {
+    citation: sources.map((s) => ({
+      '@type': 'CreativeWork',
+      name: s.title,
+      url: s.url,
+    })),
+  }),
+};
+---
+
+<Base title={`${title} — David Gerbino`} description={description} ogType="article" jsonLd={[articleLd]}>
+  <article class="prose">
+    <header>
+      <h1>{title}</h1>
+      <p class="data-line">
+        <time datetime={iso(pubDate)}>{iso(pubDate)}</time>
+        {updatedDate && <span>updated <time datetime={iso(updatedDate)}>{iso(updatedDate)}</time></span>}
+        <span>{words.toLocaleString()} words</span>
+        <span>{minutes} min</span>
+        {tags.length > 0 && <span>{tags.join(', ')}</span>}
+      </p>
+    </header>
+
+    {youtube && <YouTube id={youtube} title={title} />}
+
+    <slot />
+
+    {sources.length > 0 && (
+      <section class="sources" aria-label="Sources">
+        <h2>Sources</h2>
+        <ol>
+          {sources.map((s) => (
+            <li>
+              <a href={s.url} rel="external noopener">{s.title}</a>
+            </li>
+          ))}
+        </ol>
+      </section>
+    )}
+  </article>
+</Base>

@@ -1,0 +1,27 @@
+# David Gerbino — dmgerbino.com
+
+> Personal hub for David Gerbino: fintech data builder and writer. Essays and
+> notes on fintech, banking data, regulatory analytics, and building with AI,
+> plus an index of live projects.
+
+David Gerbino builds fintech data tools solo, shipping on nights and weekends.
+He writes about banking data (FFIEC call reports, Summary of Deposits, NDFI
+exposure), fintech infrastructure, and AI-augmented workflows.
+
+## Writing
+
+- [Writing index](https://www.dmgerbino.com/writing): essays on fintech, banking data, and AI
+- [Notes](https://www.dmgerbino.com/notes): shorter observations and links
+
+## Projects
+
+- [NDFI Tracker](https://ndfi-tracker.com): U.S. bank lending exposure tracker monitoring non-depository financial institution (NDFI) risk across 4,500+ banks using FFIEC call report data
+- [Fintech Newsletters](https://fintechnewsletters.com): curated directory of fintech newsletters
+
+## Elsewhere
+
+- [X / Twitter](https://x.com/dmgerbino)
+
+## Contact
+
+- Site: https://www.dmgerbino.com/about
