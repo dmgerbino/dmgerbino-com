@@ -14,7 +14,7 @@ const rendered = await Promise.all(
 >
   <h1>Projects</h1>
   {rendered.map(({ data, Content }) => (
-    <section>
+    <section class="card">
       <h2>{data.url ? <a href={data.url}>{data.title}</a> : data.title}</h2>
       <p class="data-line"><span>{data.status}</span></p>
       <p>{data.description}</p>

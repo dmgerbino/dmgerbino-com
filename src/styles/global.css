@@ -1,5 +1,7 @@
-/* dmgerbino.com — design tokens per David's UI design standards.
-   Dark mode base is #000000 (pure black, OLED) — never a dark gray. */
+/* dmgerbino.com — Design Standard: Direction C (Hybrid)
+   Rule that governs everything: SANS for interface, SERIF for what David wrote,
+   MONO for data. M3 shell (chips, tonal states, soft cards) over the family palette.
+   Dark mode base is #000000 (OLED) — elevation becomes borders, never shadows. */
 
 :root {
   font-size: 16px;
@@ -9,10 +11,14 @@
   --space-lg: 32px;
   --space-xl: 48px;
   --space-2xl: 64px;
-  --measure: 42rem; /* ~68ch reading width */
-  --font-body: Charter, 'Bitstream Charter', 'Sitka Text', Cambria, Georgia, serif;
-  --font-ui: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-  --font-mono: ui-monospace, 'Cascadia Code', 'SF Mono', Menlo, Consolas, monospace;
+  --measure: 42rem;            /* ~62-68ch reading width */
+  --radius-sm: 8px;            /* small controls, inline code */
+  --radius-md: 12px;           /* list rows, inputs */
+  --radius-lg: 16px;           /* cards */
+  --radius-full: 999px;        /* chips, nav pills, toggle */
+  --font-body: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;   /* interface */
+  --font-prose: Charter, 'Bitstream Charter', 'Sitka Text', Cambria, Georgia, serif; /* authored */
+  --font-mono: ui-monospace, 'Cascadia Code', 'SF Mono', Menlo, Consolas, monospace; /* data */
 }
 
 [data-theme='light'] {
@@ -25,10 +31,12 @@
   --color-accent-lt: #FDECEA;
   --color-text: #1A1918;
   --color-text-muted: #5C5750;
+  --elev-1: 0 1px 3px rgba(26,25,24,.08), 0 4px 12px rgba(26,25,24,.06);
+  --on-secondary: #FFFFFF;
 }
 
 [data-theme='dark'] {
-  --color-base: #000000;   /* OLED pixels off — hard requirement */
+  --color-base: #000000;       /* OLED pixels off — hard requirement */
   --color-surface: #0D0D0D;
   --color-border: #1F1F1F;
   --color-secondary: #5B9BD5;
@@ -37,13 +45,14 @@
   --color-accent-lt: #1A0A08;
   --color-text: #F0EDEA;
   --color-text-muted: #888580;
+  --elev-1: none;              /* elevation = borders in dark mode */
+  --on-secondary: #000000;
 }
 
 *, *::before, *::after {
   box-sizing: border-box;
-  transition: background-color 0.25s ease, border-color 0.25s ease, color 0.25s ease;
+  transition: background-color .25s ease, border-color .25s ease, color .25s ease;
 }
-
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { transition: none !important; animation: none !important; }
 }
@@ -57,108 +66,129 @@ body {
   background: var(--color-base);
 }
 
-h1, h2, h3 { font-family: var(--font-body); line-height: 1.25; color: var(--color-text); }
-h1 { font-size: 1.953rem; margin: 0 0 var(--space-sm); }
-h2 { font-size: 1.563rem; margin: var(--space-lg) 0 var(--space-xs); }
-h3 { font-size: 1.25rem; margin: var(--space-md) 0 var(--space-xs); }
+/* Type scale (Major Third). Headings inside .prose are serif; interface headings sans. */
+h1 { font-size: 1.953rem; line-height: 1.25; margin: 0 0 var(--space-sm); }
+h2 { font-size: 1.563rem; line-height: 1.25; margin: var(--space-lg) 0 var(--space-xs); }
+h3 { font-size: 1.25rem;  margin: var(--space-md) 0 var(--space-xs); }
 small, .meta { font-size: 0.875rem; }
 
 a { color: var(--color-secondary); text-decoration: underline; text-underline-offset: 2px; }
 a:hover { color: var(--color-accent); }
-
 :focus-visible { outline: 3px solid var(--color-accent); outline-offset: 2px; }
 
-.skip-link {
-  position: absolute; left: -9999px;
-  background: var(--color-surface); color: var(--color-text);
-  padding: var(--space-xs) var(--space-sm);
-}
+/* M3 state layers: hover 8%, press 14% of brand over any interactive surface */
+.state { position: relative; }
+.state:hover  { background: color-mix(in srgb, var(--color-secondary) 8%, transparent); }
+.state:active { background: color-mix(in srgb, var(--color-secondary) 14%, transparent); }
+
+.skip-link { position: absolute; left: -9999px; background: var(--color-surface); color: var(--color-text); padding: var(--space-xs) var(--space-sm); border-radius: var(--radius-sm); }
 .skip-link:focus { left: var(--space-sm); top: var(--space-sm); z-index: 10; }
 
 .wrap { max-width: var(--measure); margin: 0 auto; padding: 0 var(--space-sm); }
 
-.site-header {
-  border-bottom: 1px solid var(--color-border);
-  padding: var(--space-sm) 0;
-  font-family: var(--font-ui);
-}
-.site-header .wrap { display: flex; align-items: center; gap: var(--space-sm); flex-wrap: wrap; }
+/* Header: sans, nav as tonal pills */
+.site-header { border-bottom: 1px solid var(--color-border); padding: var(--space-sm) 0; }
+.site-header .wrap { display: flex; align-items: center; gap: var(--space-xs); flex-wrap: wrap; }
 .site-name { font-weight: 700; color: var(--color-text); text-decoration: none; margin-right: auto; }
-.site-nav { display: flex; gap: var(--space-sm); }
-.site-nav a { text-decoration: none; color: var(--color-text-muted); }
-.site-nav a:hover, .site-nav a[aria-current='page'] { color: var(--color-accent); }
+.site-nav { display: flex; gap: 4px; flex-wrap: wrap; }
+.site-nav a {
+  text-decoration: none; color: var(--color-text-muted);
+  font-size: 0.875rem; font-weight: 500;
+  padding: 6px 14px; border-radius: var(--radius-full);
+}
+.site-nav a:hover { background: color-mix(in srgb, var(--color-secondary) 8%, transparent); color: var(--color-text); }
+.site-nav a[aria-current='page'] { background: var(--color-secondary-lt); color: var(--color-secondary); }
 
 main { padding: var(--space-xl) 0 var(--space-2xl); }
 
-/* The signature: an honest, tabular metadata line on every piece */
+/* Signature: honest mono data-line on every piece */
 .data-line {
-  font-family: var(--font-mono);
-  font-size: 0.875rem;
-  color: var(--color-text-muted);
-  display: flex; gap: var(--space-xs); flex-wrap: wrap;
-  margin: 0 0 var(--space-lg);
+  font-family: var(--font-mono); font-size: 0.875rem; color: var(--color-text-muted);
+  display: flex; gap: var(--space-xs); flex-wrap: wrap; margin: 0 0 var(--space-sm);
 }
 .data-line > * + *::before { content: '·'; margin-right: var(--space-xs); }
 
-article.prose img, article.prose video, article.prose iframe { max-width: 100%; height: auto; }
+/* Chips: filled tonal, full radius (M3), always paired with underline-free text */
+.chips { display: flex; flex-wrap: wrap; gap: var(--space-xs); margin: 0 0 var(--space-lg); }
+.chip {
+  font-family: var(--font-body); font-size: 0.875rem; font-weight: 500;
+  background: var(--color-secondary-lt); color: var(--color-secondary);
+  padding: 6px 14px; border-radius: var(--radius-full); text-decoration: none;
+}
+.chip:hover { background: color-mix(in srgb, var(--color-secondary) 16%, var(--color-secondary-lt)); color: var(--color-secondary); }
+
+/* THE RULE: everything the reader enters to read is serif */
+article.prose { font-family: var(--font-prose); font-size: 1.0625rem; line-height: 1.7; }
+article.prose h1, article.prose h2, article.prose h3 { font-family: var(--font-prose); font-weight: 400; }
+article.prose img, article.prose video, article.prose iframe { max-width: 100%; height: auto; border-radius: var(--radius-md); }
 article.prose blockquote {
-  margin: var(--space-md) 0;
-  padding-left: var(--space-sm);
-  border-left: 2px solid var(--color-accent);
+  margin: var(--space-md) 0; padding: var(--space-xs) var(--space-sm);
+  border-left: 3px solid var(--color-accent);
+  background: var(--color-surface); border-radius: 0 var(--radius-md) var(--radius-md) 0;
   color: var(--color-text-muted);
 }
 article.prose pre {
-  font-family: var(--font-mono); font-size: 0.875rem;
-  background: var(--color-surface); border: 1px solid var(--color-border);
+  font-family: var(--font-mono); font-size: 0.875rem; line-height: 1.6;
+  background: var(--color-surface); color: var(--color-text);
+  border: 1px solid var(--color-border); border-radius: var(--radius-md);
   padding: var(--space-sm); overflow-x: auto;
 }
 article.prose code { font-family: var(--font-mono); font-size: 0.875rem; }
+article.prose p code, article.prose li code {
+  background: var(--color-surface); border: 1px solid var(--color-border);
+  padding: 1px 6px; border-radius: var(--radius-sm);
+}
 
+/* Entry lists: rows with state layers */
 .entry-list { list-style: none; padding: 0; margin: 0; }
-.entry-list li {
+.entry-list li + li { border-top: 1px solid var(--color-border); }
+.entry-list a, .entry-list .row {
   display: flex; gap: var(--space-sm); align-items: baseline;
-  padding: var(--space-xs) 0;
-  border-bottom: 1px solid var(--color-border);
+  padding: 12px var(--space-xs); border-radius: var(--radius-md);
+  color: var(--color-text); text-decoration: none;
 }
-.entry-list time {
-  font-family: var(--font-mono); font-size: 0.875rem;
-  color: var(--color-text-muted); white-space: nowrap;
-}
+.entry-list a:hover { background: color-mix(in srgb, var(--color-secondary) 8%, transparent); color: var(--color-text); }
+.entry-list a:active { background: color-mix(in srgb, var(--color-secondary) 14%, transparent); }
+.entry-list time { font-family: var(--font-mono); font-size: 0.875rem; color: var(--color-text-muted); white-space: nowrap; }
 
-.sources {
-  margin-top: var(--space-xl);
-  padding-top: var(--space-sm);
-  border-top: 1px solid var(--color-border);
+/* Cards: M3 elevation in light, borders in dark (border present in both for edge honesty) */
+.card {
+  background: var(--color-surface); border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg); padding: var(--space-sm) var(--space-sm);
+  margin: var(--space-sm) 0; box-shadow: var(--elev-1);
 }
-.sources h2 { font-size: 1rem; font-family: var(--font-ui); margin-top: 0; }
+.card h2, .card h3 { margin-top: 0; }
+
+/* Sources / citations */
+.sources { margin-top: var(--space-xl); padding-top: var(--space-sm); border-top: 1px solid var(--color-border); font-family: var(--font-body); }
+.sources h2 { font-size: 1rem; margin-top: 0; }
 .sources ol { margin: 0; padding-left: var(--space-md); font-size: 0.875rem; }
 
-.site-footer {
-  border-top: 1px solid var(--color-border);
-  padding: var(--space-md) 0 var(--space-xl);
-  font-family: var(--font-ui);
-  font-size: 0.875rem;
-  color: var(--color-text-muted);
-}
+.site-footer { border-top: 1px solid var(--color-border); padding: var(--space-md) 0 var(--space-xl); font-size: 0.875rem; color: var(--color-text-muted); }
 .site-footer .wrap { display: flex; gap: var(--space-sm); flex-wrap: wrap; }
 
-.theme-toggle {
-  font-family: var(--font-ui); font-size: 0.875rem;
-  background: var(--color-surface); color: var(--color-text);
-  border: 1px solid var(--color-border);
-  padding: 4px 12px; border-radius: 999px; cursor: pointer;
+/* Theme toggle: accessible pill with spring knob */
+.theme-toggle-wrap { display: inline-flex; align-items: center; gap: var(--space-xs); }
+.toggle { position: relative; display: inline-block; }
+.toggle input { position: absolute; opacity: 0; inset: 0; cursor: pointer; margin: 0; }
+.toggle-track { display: block; width: 52px; height: 28px; border-radius: var(--radius-full); background: var(--color-surface); border: 1px solid var(--color-border); position: relative; }
+.toggle-track::after {
+  content: ''; position: absolute; top: 2px; left: 3px; width: 22px; height: 22px;
+  border-radius: 50%; background: var(--color-secondary);
+  transition: transform .28s cubic-bezier(.34, 1.56, .64, 1);
 }
+.toggle input:checked + .toggle-track::after { transform: translateX(24px); }
+.toggle input:focus-visible + .toggle-track { outline: 3px solid var(--color-accent); outline-offset: 2px; }
 
-/* YouTube facade — no third-party JS until the reader clicks play */
+/* YouTube facade — zero third-party JS until click */
 .yt-facade {
-  position: relative; display: block; width: 100%;
-  aspect-ratio: 16 / 9; padding: 0; border: 1px solid var(--color-border);
-  background: #000 center / cover no-repeat; cursor: pointer;
+  position: relative; display: block; width: 100%; aspect-ratio: 16 / 9; padding: 0;
+  border: 1px solid var(--color-border); border-radius: var(--radius-lg);
+  background: #000 center / cover no-repeat; cursor: pointer; overflow: hidden;
 }
 .yt-facade::after {
-  content: '▶'; position: absolute; inset: 0;
-  display: grid; place-items: center;
-  font-size: 3rem; color: #fff;
-  background: rgba(0, 0, 0, 0.3);
+  content: '▶'; position: absolute; inset: 0; display: grid; place-items: center;
+  font-size: 3rem; color: #fff; background: rgba(0,0,0,.3);
 }
-.yt-frame { width: 100%; aspect-ratio: 16 / 9; border: 0; }
+.yt-facade:hover::after { background: rgba(0,0,0,.45); }
+.yt-frame { width: 100%; aspect-ratio: 16 / 9; border: 0; border-radius: var(--radius-lg); }

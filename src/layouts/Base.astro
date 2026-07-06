@@ -103,9 +103,12 @@ const path = Astro.url.pathname.replace(/\/$/, '');
             </a>
           ))}
         </nav>
-        <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
-          Theme
-        </button>
+        <span class="theme-toggle-wrap">
+          <label class="toggle" for="theme-toggle">
+            <input type="checkbox" id="theme-toggle" role="switch" aria-label="Dark mode" aria-checked="false" />
+            <span class="toggle-track"></span>
+          </label>
+        </span>
       </div>
     </header>
     <main id="main" class="wrap">
@@ -120,12 +123,17 @@ const path = Astro.url.pathname.replace(/\/$/, '');
       </div>
     </footer>
     <script is:inline>
-      document.getElementById('theme-toggle').addEventListener('click', function () {
-        var next =
-          document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-        document.documentElement.setAttribute('data-theme', next);
-        localStorage.setItem('theme', next);
-      });
+      (function () {
+        var input = document.getElementById('theme-toggle');
+        input.checked = document.documentElement.getAttribute('data-theme') === 'dark';
+        input.setAttribute('aria-checked', String(input.checked));
+        input.addEventListener('change', function () {
+          var next = input.checked ? 'dark' : 'light';
+          document.documentElement.setAttribute('data-theme', next);
+          input.setAttribute('aria-checked', String(input.checked));
+          localStorage.setItem('theme', next);
+        });
+      })();
     </script>
   </body>
 </html>
