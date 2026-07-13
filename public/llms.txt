@@ -1,22 +1,35 @@
 # David Gerbino — dmgerbino.com
 
-> Personal hub for David Gerbino: fintech data builder and writer. Essays and
-> notes on fintech, banking data, regulatory analytics, and building with AI,
-> plus an index of live projects.
+> David Gerbino builds fintech data products with AI-assisted development and
+> publishes recurring research on DMARC email authentication adoption, AI
+> answer engine visibility (GEO), and search visibility (SEO) across banks,
+> credit unions, and neobanks.
 
-David Gerbino builds fintech data tools solo, shipping on nights and weekends.
-He writes about banking data (FFIEC call reports, Summary of Deposits, NDFI
-exposure), fintech infrastructure, and AI-augmented workflows.
-
-## Writing
-
-- [Writing index](https://www.dmgerbino.com/writing): essays on fintech, banking data, and AI
-- [Notes](https://www.dmgerbino.com/notes): shorter observations and links
+David Gerbino builds fintech data products solo, shipping on nights and
+weekends with AI-assisted development. His research program tracks how U.S.
+financial institutions — banks, credit unions, and neobanks — show up in
+email authentication (DMARC), AI answer engines (GEO), and search (SEO), and
+includes a monthly BLS unemployment data visualization project. He writes
+about banking data (FFIEC call reports, NDFI exposure), fintech
+infrastructure, and AI-augmented workflows.
 
 ## Projects
 
 - [NDFI Tracker](https://ndfi-tracker.com): U.S. bank lending exposure tracker monitoring non-depository financial institution (NDFI) risk across 4,500+ banks using FFIEC call report data
 - [Fintech Newsletters](https://fintechnewsletters.com): curated directory of fintech newsletters
+- [How each was built](https://www.dmgerbino.com/projects): the tech stack and AI-assisted process behind each product
+
+## Research
+
+- [Research program](https://www.dmgerbino.com/research): recurring research, each project on its own cadence, published with methodology, sources, and underlying data
+  - DMARC adoption across banks, credit unions, and neobanks
+  - GEO — how AI answer engines represent financial institutions
+  - SEO — search visibility companion series (planned)
+  - U.S. unemployment, visualized — monthly BLS data project
+
+## Writing
+
+- [Writing index](https://www.dmgerbino.com/writing): essays on fintech, banking data, and AI
 
 ## Elsewhere
 

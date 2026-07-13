@@ -8,7 +8,7 @@ export async function GET(context) {
   return rss({
     title: 'David Gerbino',
     description:
-      'Essays and notes on fintech, banking data, and building with AI.',
+      'Fintech data products and research: essays on banking data, DMARC, GEO, SEO, and building with AI.',
     site: context.site,
     items: posts.map((post) => ({
       title: post.data.title,

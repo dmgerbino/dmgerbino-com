@@ -4,7 +4,7 @@ import { getCollection } from 'astro:content';
 
 const writing = (await getCollection('writing', ({ data }) => !data.draft))
   .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
-  .slice(0, 5);
+  .slice(0, 3);
 const projects = (await getCollection('projects'))
   .filter((p) => p.data.status !== 'archived')
   .sort((a, b) => a.data.order - b.data.order);
@@ -12,26 +12,17 @@ const iso = (d: Date) => d.toISOString().slice(0, 10);
 ---
 
 <Base
-  title="David Gerbino — fintech data builder and writer"
-  description="Personal hub for David Gerbino: essays and notes on fintech, banking data, and building with AI, plus an index of live projects."
+  title="David Gerbino — fintech data products and research, built with AI"
+  description="David Gerbino builds fintech data products with AI-assisted development and publishes recurring research on DMARC adoption, AI answer engine visibility (GEO), and search visibility (SEO) across banks, credit unions, and neobanks."
 >
   <h1>David Gerbino</h1>
   <p>
-    I build fintech data tools and write about banking data, regulatory
-    analytics, and building with AI. This site is the index: everything I
-    write, make, and ship lives here or is linked from here.
+    I build fintech data products solo, with AI-assisted development, and
+    publish recurring research on how banks, credit unions, and neobanks show
+    up in email authentication (DMARC), AI answer engines (GEO), and search
+    (SEO). This site is the index: everything I build and publish lives here
+    or is linked from here.
   </p>
-
-  <h2>Writing</h2>
-  <ul class="entry-list">
-    {writing.map((post) => (
-      <li>
-        <time datetime={iso(post.data.pubDate)}>{iso(post.data.pubDate)}</time>
-        <a href={`/writing/${post.id}`}>{post.data.title}</a>
-      </li>
-    ))}
-  </ul>
-  <p class="meta"><a href="/writing">All writing →</a></p>
 
   <h2>Projects</h2>
   <ul class="entry-list">
@@ -42,4 +33,25 @@ const iso = (d: Date) => d.toISOString().slice(0, 10);
       </li>
     ))}
   </ul>
+  <p class="meta"><a href="/projects">How each was built →</a></p>
+
+  <h2>Research</h2>
+  <p>
+    Four recurring projects — DMARC adoption, GEO visibility, SEO visibility,
+    and a monthly BLS unemployment visualization — each updated on its own
+    cadence, each published with methodology, sources, and the underlying
+    data.
+  </p>
+  <p class="meta"><a href="/research">The research program →</a></p>
+
+  <h2>Recent writing</h2>
+  <ul class="entry-list">
+    {writing.map((post) => (
+      <li>
+        <time datetime={iso(post.data.pubDate)}>{iso(post.data.pubDate)}</time>
+        <a href={`/writing/${post.id}`}>{post.data.title}</a>
+      </li>
+    ))}
+  </ul>
+  <p class="meta"><a href="/writing">All writing →</a></p>
 </Base>

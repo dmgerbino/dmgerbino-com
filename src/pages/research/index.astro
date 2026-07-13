@@ -1,0 +1,52 @@
+---
+import Base from '../../layouts/Base.astro';
+
+// Phase 2 replaces this static list with a `research` content collection.
+// Each project below becomes a canonical landing page with dated editions.
+const program = [
+  {
+    title: 'DMARC adoption — banks, credit unions, and neobanks',
+    status: 'first edition in preparation',
+    summary:
+      'Email authentication posture across U.S. financial institutions: who publishes DMARC records, at what enforcement policy, and how that changes over time.',
+  },
+  {
+    title: 'GEO — AI answer engine visibility',
+    status: 'first edition in preparation',
+    summary:
+      'How AI answer engines (ChatGPT, Claude, Perplexity, Gemini) represent banks, credit unions, and neobanks, measured with a repeatable question panel.',
+  },
+  {
+    title: 'SEO — search visibility',
+    status: 'planned',
+    summary:
+      'Search visibility across the same institution set, run as a companion series to the GEO research.',
+  },
+  {
+    title: 'U.S. unemployment, visualized',
+    status: 'monthly, first edition in preparation',
+    summary:
+      'A monthly AI-assisted project: pull the latest BLS data, find something worth seeing, and publish the finding as an honest chart.',
+  },
+];
+---
+
+<Base
+  title="Research — David Gerbino"
+  description="Recurring research on banks, credit unions, and neobanks: DMARC email authentication adoption, AI answer engine visibility (GEO), search visibility (SEO), and monthly BLS unemployment data visualizations."
+>
+  <h1>Research</h1>
+  <p>
+    Recurring research projects, each updated on its own cadence. Every
+    edition ships with its methodology, sources, and the underlying data —
+    findings you can check, not just read.
+  </p>
+
+  {program.map((r) => (
+    <section class="card">
+      <h2>{r.title}</h2>
+      <p class="data-line"><span>{r.status}</span></p>
+      <p>{r.summary}</p>
+    </section>
+  ))}
+</Base>

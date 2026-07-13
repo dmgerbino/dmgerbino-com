@@ -43,23 +43,6 @@ export default config({
         content: fields.mdx({ label: 'Content' }),
       },
     }),
-    notes: collection({
-      label: 'Notes',
-      slugField: 'title',
-      path: 'src/content/notes/*',
-      entryLayout: 'content',
-      format: { contentField: 'content' },
-      schema: {
-        title: fields.slug({ name: { label: 'Title' } }),
-        pubDate: fields.date({ label: 'Published', validation: { isRequired: true } }),
-        tags: fields.array(fields.text({ label: 'Tag' }), {
-          label: 'Tags',
-          itemLabel: (props) => props.value,
-        }),
-        draft: fields.checkbox({ label: 'Draft', defaultValue: false }),
-        content: fields.mdx({ label: 'Content' }),
-      },
-    }),
     projects: collection({
       label: 'Projects',
       slugField: 'title',

@@ -25,7 +25,7 @@ const siteGraph = [
     url: 'https://www.dmgerbino.com',
     name: SITE_NAME,
     description:
-      'Personal hub for David Gerbino: fintech data builder and writer.',
+      'David Gerbino builds fintech data products with AI-assisted development and publishes recurring research on DMARC, GEO, and SEO across banks, credit unions, and neobanks.',
     publisher: { '@id': 'https://www.dmgerbino.com/#person' },
   },
   {
@@ -41,16 +41,21 @@ const siteGraph = [
       'FFIEC call reports',
       'regulatory analytics',
       'data visualization',
+      'AI-assisted software development',
+      'DMARC email authentication',
+      'generative engine optimization (GEO)',
+      'search engine optimization (SEO)',
+      'U.S. labor market data (BLS)',
     ],
   },
 ];
 
 const allJsonLd = [...siteGraph, ...jsonLd];
 const nav = [
-  { href: '/writing', label: 'Writing' },
-  { href: '/notes', label: 'Notes' },
   { href: '/projects', label: 'Projects' },
+  { href: '/research', label: 'Research' },
   { href: '/now', label: 'Now' },
+  { href: '/writing', label: 'Writing' },
   { href: '/about', label: 'About' },
 ];
 const path = Astro.url.pathname.replace(/\/$/, '');
