@@ -1,0 +1,3 @@
+# Keeps the research collection directory present when no edition is
+# published. Astro globs this path; a missing directory is a build
+# error, an empty one is simply zero entries.

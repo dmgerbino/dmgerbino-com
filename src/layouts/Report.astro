@@ -1,0 +1,302 @@
+---
+/**
+ * A research report edition.
+ *
+ * Kept separate from Post.astro rather than folded into it. A report is a
+ * dated edition of a recurring program, it carries charts that break out
+ * of the reading column, and its Sources list does double duty as the
+ * resolution target for the numbered markers printed on each chart's
+ * eyebrow. Post.astro would have to grow three conditionals to do that,
+ * and would still not want the wide band.
+ */
+import Base from './Base.astro';
+import { getBundle, socialUrl } from '../lib/bundle';
+// The chart tokens the inlined SVGs reference. Copied from the pipeline,
+// not re-authored: one rendered chart must look the same here as it does
+// in the report bundle and on social.
+import '../styles/chart-theme.css';
+
+interface Source {
+  title: string;
+  url?: string;
+}
+interface Props {
+  title: string;
+  description: string;
+  pubDate: Date;
+  updatedDate?: Date;
+  program: string;
+  edition: string;
+  bundle: string;
+  tags?: string[];
+  sources?: Source[];
+  /** raw MDX body, used only to compute honest word count / read time */
+  body?: string;
+}
+
+const {
+  title,
+  description,
+  pubDate,
+  updatedDate,
+  program,
+  edition,
+  bundle: bundleSlug,
+  tags = [],
+  sources = [],
+  body = '',
+} = Astro.props;
+
+const bundle = getBundle(bundleSlug);
+
+const words = body.split(/\s+/).filter(Boolean).length;
+const minutes = Math.max(1, Math.round(words / 230));
+const iso = (d: Date) => d.toISOString().slice(0, 10);
+const canonical = new URL(Astro.url.pathname, Astro.site).href.replace(/\/$/, '');
+
+// The landscape export is already 1200x628, which is the share-card size.
+const ogImage = bundle.charts.length
+  ? socialUrl(bundleSlug, bundle.charts[0]!.social.landscape)
+  : undefined;
+
+const reportLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Report',
+  headline: title,
+  description,
+  url: canonical,
+  mainEntityOfPage: canonical,
+  datePublished: pubDate.toISOString(),
+  ...(updatedDate && { dateModified: updatedDate.toISOString() }),
+  author: { '@id': 'https://www.dmgerbino.com/#person' },
+  publisher: { '@id': 'https://www.dmgerbino.com/#person' },
+  isPartOf: { '@type': 'CreativeWorkSeries', name: program },
+  keywords: tags.join(', '),
+  wordCount: words,
+  ...(ogImage && { image: new URL(ogImage, Astro.site).href }),
+  ...(sources.length && {
+    citation: sources.map((s) => ({
+      '@type': 'CreativeWork',
+      name: s.title,
+      url: s.url,
+    })),
+  }),
+};
+---
+
+<Base
+  title={`${title} — David Gerbino`}
+  description={description}
+  ogType="article"
+  image={ogImage}
+  jsonLd={[reportLd]}
+  wide
+>
+  <article class="report">
+    <header class="report-head">
+      <p class="report-program">
+        <a href="/research">{program}</a> · {edition}
+      </p>
+      <h1>{title}</h1>
+      <p class="data-line">
+        <time datetime={iso(pubDate)}>{iso(pubDate)}</time>
+        {updatedDate && <span>updated <time datetime={iso(updatedDate)}>{iso(updatedDate)}</time></span>}
+        <span>{words.toLocaleString()} words</span>
+        <span>{minutes} min</span>
+        <span>{bundle.charts.length} charts</span>
+      </p>
+      {tags.length > 0 && (
+        <nav class="chips" aria-label="Tags">
+          {tags.map((t) => (
+            <a class="chip" href={`/writing#${t.toLowerCase().replace(/\s+/g, '-')}`}>{t}</a>
+          ))}
+        </nav>
+      )}
+    </header>
+
+    <slot />
+
+    {sources.length > 0 && (
+      <section class="sources report-sources" aria-label="Sources">
+        <h2>Sources</h2>
+        <p class="sources-note">
+          Numbers beside each chart's label refer to this list.
+        </p>
+        <ol>
+          {sources.map((s) => (
+            <li>
+              {s.url ? <a href={s.url} rel="external noopener">{s.title}</a> : s.title}
+            </li>
+          ))}
+        </ol>
+      </section>
+    )}
+
+    <p class="report-colophon">
+      Charts generated {iso(new Date(bundle.generatedAt))} by the
+      dmarc_scanner report pipeline. Set in {bundle.font.split(' (')[0]}.
+      Every figure is downloadable in three sizes from the control on each
+      chart.
+    </p>
+  </article>
+<script is:inline>
+  // Behaviour for every ReportChart on the page, in the vanilla is:inline
+  // idiom the theme toggle in Base.astro uses. It lives in the layout
+  // rather than the component so it is emitted once instead of once per
+  // chart, and it delegates from the document so charts need no wiring.
+  (function () {
+    var LONG_PRESS_MS = 500;
+    var MOVE_CANCEL_PX = 10;
+    var open = null;
+
+    function menuOf(figure) {
+      return figure.querySelector('[data-share-menu]');
+    }
+    function toggleOf(figure) {
+      return figure.querySelector('[data-share-toggle]');
+    }
+
+    function close(restoreFocus) {
+      if (!open) return;
+      var figure = open;
+      open = null;
+      menuOf(figure).hidden = true;
+      toggleOf(figure).setAttribute('aria-expanded', 'false');
+      figure.querySelector('[data-share-status]').textContent = '';
+      if (restoreFocus) toggleOf(figure).focus();
+    }
+
+    function openMenu(figure) {
+      if (open === figure) return;
+      close(false);
+      open = figure;
+      menuOf(figure).hidden = false;
+      toggleOf(figure).setAttribute('aria-expanded', 'true');
+    }
+
+    document.addEventListener('click', function (e) {
+      var toggle = e.target.closest('[data-share-toggle]');
+      if (toggle) {
+        var figure = toggle.closest('[data-share-figure]');
+        if (open === figure) close(true);
+        else openMenu(figure);
+        return;
+      }
+
+      var item = e.target.closest('[data-share-item]');
+      if (item) {
+        deliver(item);
+        return;
+      }
+
+      // A click anywhere else dismisses.
+      if (open && !e.target.closest('[data-share-menu]')) close(false);
+    });
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && open) {
+        e.preventDefault();
+        close(true);
+      }
+    });
+
+    // Long press opens the same menu on touch, where there is no hover.
+    var timer = null;
+    var startX = 0;
+    var startY = 0;
+
+    document.addEventListener(
+      'pointerdown',
+      function (e) {
+        if (e.pointerType === 'mouse') return;
+        var figure = e.target.closest('[data-share-figure]');
+        if (!figure || e.target.closest('[data-share-menu]')) return;
+        startX = e.clientX;
+        startY = e.clientY;
+        timer = setTimeout(function () {
+          timer = null;
+          openMenu(figure);
+        }, LONG_PRESS_MS);
+      },
+      { passive: true },
+    );
+
+    function cancelPress() {
+      if (timer) {
+        clearTimeout(timer);
+        timer = null;
+      }
+    }
+    // A press that turns into a scroll is a scroll, not a long press.
+    document.addEventListener(
+      'pointermove',
+      function (e) {
+        if (!timer) return;
+        if (
+          Math.abs(e.clientX - startX) > MOVE_CANCEL_PX ||
+          Math.abs(e.clientY - startY) > MOVE_CANCEL_PX
+        ) {
+          cancelPress();
+        }
+      },
+      { passive: true },
+    );
+    document.addEventListener('pointerup', cancelPress, { passive: true });
+    document.addEventListener('pointercancel', cancelPress, { passive: true });
+
+    function say(figure, message) {
+      figure.querySelector('[data-share-status]').textContent = message;
+    }
+
+    function download(url, name) {
+      var a = document.createElement('a');
+      a.href = url;
+      a.download = name;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+    }
+
+    async function deliver(item) {
+      var figure = item.closest('[data-share-figure]');
+      var url = item.getAttribute('data-src');
+      var name = item.getAttribute('data-name');
+      var title = figure.getAttribute('data-chart-title');
+      var report = figure.getAttribute('data-report');
+
+      // The share sheet is the only route that reaches an app like
+      // Instagram, and it needs the actual file, not a link to one.
+      try {
+        var response = await fetch(url);
+        if (!response.ok) throw new Error(response.status);
+        var blob = await response.blob();
+        var file = new File([blob], name, { type: 'image/png' });
+
+        if (navigator.canShare && navigator.canShare({ files: [file] })) {
+          say(figure, 'Opening share sheet…');
+          await navigator.share({ files: [file], title: title, text: report });
+          close(false);
+          return;
+        }
+
+        // No share sheet, which is every desktop browser today.
+        var objectUrl = URL.createObjectURL(blob);
+        download(objectUrl, name);
+        setTimeout(function () {
+          URL.revokeObjectURL(objectUrl);
+        }, 10000);
+        say(figure, 'Downloaded ' + name);
+      } catch (err) {
+        // AbortError means the person closed the sheet themselves.
+        if (err && err.name === 'AbortError') {
+          close(false);
+          return;
+        }
+        // Last resort: let the browser fetch it the ordinary way.
+        download(url, name);
+        say(figure, 'Downloading ' + name);
+      }
+    }
+  })();
+</script>
+</Base>

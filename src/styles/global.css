@@ -192,3 +192,149 @@ article.prose p code, article.prose li code {
 }
 .yt-facade:hover::after { background: rgba(0,0,0,.45); }
 .yt-frame { width: 100%; aspect-ratio: 16 / 9; border: 0; border-radius: var(--radius-lg); }
+
+/* ---------------------------------------------------------------------
+   Research reports
+   Wide band, narrow prose. An 880px chart cannot render at 1:1 inside the
+   42rem reading measure, and scaling it down puts its 12px text under the
+   floor -- so the band widens and the text column stays where it was.
+   --------------------------------------------------------------------- */
+.wrap-wide { max-width: 57rem; }   /* 912px - 32px gutter = an 880px band */
+
+article.report { font-family: var(--font-prose); font-size: 1.0625rem; line-height: 1.7; }
+article.report > * { max-width: var(--measure); margin-inline: auto; }
+article.report h1, article.report h2, article.report h3 { font-family: var(--font-prose); font-weight: 400; }
+article.report table {
+  display: block; overflow-x: auto; width: max-content; max-width: var(--measure);
+  border-collapse: collapse; font-family: var(--font-body); font-size: 0.9375rem;
+}
+article.report th, article.report td {
+  text-align: left; padding: var(--space-xs) var(--space-sm);
+  border-bottom: 1px solid var(--color-border);
+}
+article.report th { font-weight: 700; color: var(--color-text-muted); }
+article.report td + td { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+article.report code { font-family: var(--font-mono); font-size: 0.875rem; }
+article.report p code, article.report li code, article.report td code {
+  background: var(--color-surface); border: 1px solid var(--color-border);
+  padding: 1px 6px; border-radius: var(--radius-sm);
+}
+
+.report-head { margin-bottom: var(--space-lg); }
+.report-program {
+  font-family: var(--font-body); font-size: 0.875rem; font-weight: 500;
+  color: var(--color-text-muted); margin: 0 0 var(--space-xs);
+}
+.report-program a { color: var(--color-secondary); text-decoration: none; }
+.report-program a:hover { text-decoration: underline; }
+
+/* Headline figures. Mono, because they are data. */
+.stat-row {
+  display: grid; gap: var(--space-sm); margin: var(--space-lg) auto;
+  grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+}
+.stat {
+  background: var(--color-surface); border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg); padding: var(--space-sm);
+}
+.stat-label {
+  font-family: var(--font-body); font-size: 0.875rem; font-weight: 500;
+  color: var(--color-text-muted); margin: 0 0 var(--space-xs);
+}
+.stat-value {
+  font-family: var(--font-mono); font-size: 1.953rem; font-weight: 700;
+  line-height: 1.1; margin: 0; font-variant-numeric: tabular-nums;
+}
+.stat-note {
+  font-family: var(--font-mono); font-size: 0.875rem;
+  color: var(--color-text-muted); margin: var(--space-xs) 0 0;
+}
+
+.report-sources .sources-note {
+  font-family: var(--font-body); font-size: 0.875rem;
+  color: var(--color-text-muted); margin: 0 0 var(--space-xs);
+}
+.report-colophon {
+  font-family: var(--font-body); font-size: 0.875rem; line-height: 1.6;
+  color: var(--color-text-muted); margin-top: var(--space-lg);
+}
+
+/* ---------------------------------------------------------------------
+   Charts, and the share control on each one
+   --------------------------------------------------------------------- */
+/* Note the selector. `article.report > *` above is (0,1,1), so a bare
+   `.report-figure` at (0,1,0) would lose the max-width and the chart would
+   be trapped in the 42rem reading column. The figure is the one child that
+   uses the whole band. */
+article.report > .report-figure {
+  position: relative; margin: var(--space-xl) 0; padding: 0;
+  max-width: 100%;
+}
+.chart-frame { overflow-x: auto; }        /* the figure may scroll; the page never does */
+.chart svg { display: block; width: 100%; height: auto; }
+.chart-wide svg { max-width: 880px; }
+.chart-narrow svg {
+  max-width: var(--chart-max); min-width: var(--chart-min); margin-inline: auto;
+}
+
+/* Below the width where the wide canvas renders at 1:1, use the canvas
+   authored for a narrow column instead of scaling this one down. */
+.chart-narrow { display: none; }
+@media (max-width: 56.999rem) {
+  .chart-wide { display: none; }
+  .chart-narrow { display: block; }
+}
+
+.chart-actions { position: absolute; top: 0; right: 0; }
+.chart-share {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-family: var(--font-body); font-size: 0.875rem; font-weight: 500;
+  color: var(--color-text); background: var(--color-surface);
+  border: 1px solid var(--color-border); border-radius: var(--radius-full);
+  padding: 6px 14px; cursor: pointer;
+  opacity: 0; transition: opacity .15s ease;
+}
+/* Never hover-only: a keyboard reveals it, and a touch screen keeps it. */
+.report-figure:hover .chart-share,
+.report-figure:focus-within .chart-share,
+.chart-share[aria-expanded='true'] { opacity: 1; }
+@media (hover: none) { .chart-share { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .chart-share { transition: none; } }
+.chart-share:hover { background: color-mix(in srgb, var(--color-secondary) 8%, var(--color-surface)); }
+.chart-share:active { background: color-mix(in srgb, var(--color-secondary) 14%, var(--color-surface)); }
+
+.chart-menu {
+  position: absolute; top: calc(100% + var(--space-xs)); right: 0; z-index: 5;
+  width: 17rem; max-width: calc(100vw - var(--space-lg));
+  background: var(--color-surface); border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg); box-shadow: var(--elev-1);
+  padding: var(--space-xs);
+  font-family: var(--font-body); text-align: left;
+}
+.chart-menu[hidden] { display: none; }
+.chart-menu-title {
+  font-size: 0.8125rem; font-weight: 700; text-transform: uppercase;
+  letter-spacing: .05em; color: var(--color-text-muted);
+  margin: var(--space-xs) var(--space-xs) var(--space-xs);
+}
+.chart-menu-item {
+  display: grid; grid-template-columns: 1fr auto; gap: 0 var(--space-xs);
+  width: 100%; text-align: left; cursor: pointer;
+  background: none; border: 0; border-radius: var(--radius-md);
+  padding: var(--space-xs); color: var(--color-text); font: inherit;
+}
+.chart-menu-item:hover { background: color-mix(in srgb, var(--color-secondary) 8%, transparent); }
+.chart-menu-item:active { background: color-mix(in srgb, var(--color-secondary) 14%, transparent); }
+.chart-menu-label { font-size: 0.9375rem; font-weight: 500; }
+.chart-menu-dims {
+  font-family: var(--font-mono); font-size: 0.8125rem;
+  color: var(--color-text-muted); font-variant-numeric: tabular-nums;
+}
+.chart-menu-note {
+  grid-column: 1 / -1; font-size: 0.8125rem; color: var(--color-text-muted);
+}
+.chart-menu-status {
+  font-size: 0.8125rem; color: var(--color-text-muted);
+  margin: var(--space-xs); min-height: 1.2em;
+}
+.chart-menu-status:empty { display: none; }

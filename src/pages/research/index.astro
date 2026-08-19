@@ -1,8 +1,14 @@
 ---
 import Base from '../../layouts/Base.astro';
+import { getCollection } from 'astro:content';
 
-// Phase 2 replaces this static list with a `research` content collection.
-// Each project below becomes a canonical landing page with dated editions.
+/**
+ * The research program. Each entry is a recurring project; the editions
+ * under it come from the `research` collection, matched on the `program`
+ * field, so publishing a report lists it here with no edit to this file.
+ *
+ * Projects with no published edition yet keep a status line instead.
+ */
 const program = [
   {
     title: 'DMARC adoption — banks, credit unions, and neobanks',
@@ -29,6 +35,13 @@ const program = [
       'A monthly AI-assisted project: pull the latest BLS data, find something worth seeing, and publish the finding as an honest chart.',
   },
 ];
+
+const reports = (await getCollection('research', ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+);
+
+const editionsFor = (title: string) => reports.filter((r) => r.data.program === title);
+const iso = (d: Date) => d.toISOString().slice(0, 10);
 ---
 
 <Base
@@ -42,11 +55,35 @@ const program = [
     findings you can check, not just read.
   </p>
 
-  {program.map((r) => (
-    <section class="card">
-      <h2>{r.title}</h2>
-      <p class="data-line"><span>{r.status}</span></p>
-      <p>{r.summary}</p>
-    </section>
-  ))}
+  {
+    program.map((r) => {
+      const editions = editionsFor(r.title);
+      return (
+        <section class="card">
+          <h2>{r.title}</h2>
+          <p class="data-line">
+            <span>
+              {editions.length
+                ? `${editions.length} edition${editions.length > 1 ? 's' : ''}`
+                : r.status}
+            </span>
+            {editions.length > 0 && <span>latest {iso(editions[0]!.data.pubDate)}</span>}
+          </p>
+          <p>{r.summary}</p>
+          {editions.length > 0 && (
+            <ul class="entry-list">
+              {editions.map((e) => (
+                <li>
+                  <a href={`/research/${e.id}`}>
+                    <time datetime={iso(e.data.pubDate)}>{e.data.edition}</time>
+                    <span>{e.data.title}</span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          )}
+        </section>
+      );
+    })
+  }
 </Base>
