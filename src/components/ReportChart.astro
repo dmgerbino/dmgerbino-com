@@ -1,0 +1,94 @@
+---
+/**
+ * One chart from a report bundle, with a share/download control.
+ *
+ * The chart is inlined as SVG rather than linked as an image, so its text
+ * stays real text: selectable, readable by a screen reader, quotable by an
+ * answer engine, and themed by the page's own CSS variables.
+ *
+ * Two SVGs are inlined and swapped by media query. This is not a
+ * responsive-image nicety -- scaling the 880px canvas into a phone column
+ * renders its 12px text at 4.7px, so the narrow canvas is a separate
+ * rendering authored for the width it is seen at. Together they are about
+ * 6KB per chart, which is cheaper than one of the PNGs.
+ */
+import { getChart, chartSvg, socialUrl, type SocialFormat } from '../lib/bundle';
+
+interface Props {
+  bundle: string;
+  slug: string;
+  /** Report title, used in the share sheet's text. */
+  reportTitle: string;
+}
+
+const { bundle, slug, reportTitle } = Astro.props;
+const chart = getChart(bundle, slug);
+
+const wideSvg = chartSvg(bundle, chart.web.file);
+const narrowSvg = chartSvg(bundle, chart.webNarrow.file);
+
+const formats: { id: SocialFormat; label: string; note: string }[] = [
+  { id: 'square', label: 'Square', note: 'Instagram, Facebook, X, LinkedIn' },
+  { id: 'portrait', label: 'Portrait', note: 'Instagram and Facebook feed' },
+  { id: 'landscape', label: 'Landscape', note: 'LinkedIn and X feed' },
+];
+
+const menuId = `chart-menu-${slug}`;
+---
+
+<figure class="report-figure" data-share-figure data-chart-title={chart.title} data-report={reportTitle}>
+  <div class="chart-frame">
+    <div class="chart chart-wide" set:html={wideSvg} />
+    <div
+      class="chart chart-narrow"
+      style={`--chart-max:${chart.webNarrow.maxWidth}px;--chart-min:${chart.webNarrow.minContainer}px`}
+      set:html={narrowSvg}
+    />
+  </div>
+
+  <div class="chart-actions">
+    <button
+      type="button"
+      class="chart-share"
+      aria-expanded="false"
+      aria-controls={menuId}
+      data-share-toggle
+    >
+      <svg aria-hidden="true" viewBox="0 0 24 24" width="16" height="16">
+        <path
+          d="M12 3v12M12 3l-4 4M12 3l4 4M5 14v4a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-4"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"></path>
+      </svg>
+      <span>Share</span>
+    </button>
+
+    <div class="chart-menu" id={menuId} hidden data-share-menu>
+      <p class="chart-menu-title">Save or share this chart</p>
+      {
+        formats.map((f) => {
+          const asset = chart.social[f.id];
+          return (
+            <button
+              type="button"
+              class="chart-menu-item"
+              data-share-item
+              data-src={socialUrl(bundle, asset)}
+              data-name={`${slug}-${f.id}.png`}
+            >
+              <span class="chart-menu-label">{f.label}</span>
+              <span class="chart-menu-dims">
+                {asset.width} × {asset.height}
+              </span>
+              <span class="chart-menu-note">{f.note}</span>
+            </button>
+          );
+        })
+      }
+      <p class="chart-menu-status" data-share-status role="status"></p>
+    </div>
+  </div>
+</figure>

@@ -9,9 +9,26 @@ interface Props {
   /** Extra JSON-LD objects to inject alongside the sitewide graph */
   jsonLd?: object[];
   noindex?: boolean;
+  /** Absolute-from-root path to a share image, e.g. a 1200x628 chart export */
+  image?: string;
+  /**
+   * Widen the content band. Reports need it: an 880px chart cannot render
+   * at 1:1 inside the 42rem reading measure, and scaling it down breaks
+   * the chart text floor. Prose inside stays at the reading measure.
+   */
+  wide?: boolean;
 }
 
-const { title, description, ogType = 'website', jsonLd = [], noindex = false } = Astro.props;
+const {
+  title,
+  description,
+  ogType = 'website',
+  jsonLd = [],
+  noindex = false,
+  image,
+  wide = false,
+} = Astro.props;
+const imageUrl = image ? new URL(image, Astro.site).href : undefined;
 const canonical = new URL(Astro.url.pathname, Astro.site).href.replace(/\/$/, '') || Astro.site;
 
 const SITE_NAME = 'David Gerbino';
@@ -78,10 +95,12 @@ const path = Astro.url.pathname.replace(/\/$/, '');
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
-    <meta name="twitter:card" content="summary" />
+    {imageUrl && <meta property="og:image" content={imageUrl} />}
+    <meta name="twitter:card" content={imageUrl ? 'summary_large_image' : 'summary'} />
     <meta name="twitter:site" content="@dmgerbino" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
+    {imageUrl && <meta name="twitter:image" content={imageUrl} />}
 
     <script type="application/ld+json" set:html={JSON.stringify(allJsonLd)} />
 
@@ -116,7 +135,7 @@ const path = Astro.url.pathname.replace(/\/$/, '');
         </span>
       </div>
     </header>
-    <main id="main" class="wrap">
+    <main id="main" class:list={['wrap', wide && 'wrap-wide']}>
       <slot />
     </main>
     <footer class="site-footer">

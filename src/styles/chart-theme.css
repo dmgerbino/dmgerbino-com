@@ -1,0 +1,27 @@
+:root {
+  --chart-paper: #FFFFFF;
+  --chart-surface: #F7F6F3;
+  --chart-border: #E3E1DB;
+  --chart-ink: #1A1A1A;
+  --chart-muted: #5A5A5A;
+  --chart-faint: #B8B8B8;
+  --chart-primary: #2C3E50;
+  --chart-accent: #C0392B;
+  --chart-reference: #CA6F05;
+  --chart-referenceText: #A85B08;
+  --chart-grid: #E8E6E0;
+}
+
+[data-theme='dark'] {
+  --chart-paper: #000000;
+  --chart-surface: #0D0D0D;
+  --chart-border: #1F1F1F;
+  --chart-ink: #ECECEC;
+  --chart-muted: #A0A0A0;
+  --chart-faint: #4A4A4A;
+  --chart-primary: #6B8CAE;
+  --chart-accent: #E8604F;
+  --chart-reference: #F0A13C;
+  --chart-referenceText: #F0A13C;
+  --chart-grid: #1C1C1C;
+}
